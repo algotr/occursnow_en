@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row profile">
+    {% include "includes/user_menu.html" %}
+
+		<div class="col-lg-9 col-md-9 col-sm-8">
+            <div class="profile-content">
+            {% if user.username == req_user.username %}
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        {% include 'includes/form_post.html' %}
+                    </div>
+                </div>
+                {% endif %}
+
+            {% include "includes/posts.html" %}
+            </div>
+		</div>
+    </div>
+{% endblock %}
