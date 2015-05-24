@@ -1,6 +1,7 @@
 from accounts.forms import LoginForm, RegisterForm
 from django import template
 
+
 register = template.Library()
 
 

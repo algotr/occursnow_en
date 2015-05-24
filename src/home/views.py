@@ -237,7 +237,7 @@ def rate_up(request):
         success = "false"
 
         if request.user not in post.rated_by.all():
-            post.ratings += 1
+            post.rate_up += 1
             post.rated_by.add(request.user)
             post.save()
             success = "success"
@@ -261,7 +261,7 @@ def rate_down(request):
         success = "false"
 
         if request.user not in post.rated_by.all():
-            post.ratings -= 1
+            post.rate_down += 1
             post.rated_by.add(request.user)
             post.save()
             success = "success"

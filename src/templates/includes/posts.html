@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load rating %}
 
 {% if posts %}
 {% if not user.username %}
@@ -22,47 +23,85 @@
     {% for post in posts.object_list %}
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="col-lg-1 col-md-1 hidden-sm hidden-xs">
-                    <div class="post-vote text-center">
-                        <div class="rate-up">
-                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
-                            <button type="submit" data-postid="{{ post.id }}" data-toggle="popover"
-                                    class="glyphicon glyphicon-chevron-up btn btn-large btn-link"></button>
-                            <input type="hidden" name="next" class="next-url" value="{{ next }}"/>
-                        </div>
-                        <div data-name="rating" class="text-center text-warning"><b>{{ post.ratings }}</b></div>
-
-                        <div class="rate-down">
-                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
-                            <button type="submit" data-postid="{{ post.id }}"
-                                    class="glyphicon glyphicon-chevron-down btn btn-large btn-link"></button>
-                            <input type="hidden" name="next" value="{{ next }}" class="next-url"/>
-
-                        </div>
-
-                    </div>
+                <div class="col-lg-2 col-md-2 hidden-sm hidden-xs">
+                    <table id="tbl-rating" class="table">
+                        <tr>
+                            <td data-name="rating-up" class="text-center bg-success" title="{% trans "تقييم ايجابي" %}">
+                                <b>{{ post.rate_up }}</b>
+                            </td>
+                            
+                            <td class="text-center">{% trans "التقييم" %}</td>
+                                
+                            <td data-name="rating-down" class="text-center bg-danger" title="{% trans "تقييم سلبي" %}">
+                                <b>{{ post.rate_down }}</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">
+                                <div class="rate-up">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+                                    <button type="submit" data-postid="{{ post.id }}" data-toggle="popover"
+                                            class="glyphicon glyphicon-chevron-up btn btn-large btn-link"></button>
+                                    <input type="hidden" name="next" class="next-url" value="{{ next }}"/>
+                                </div>
+                            </td>
+                            <td data-name="total-rating" class="text-center text-primary">
+                                <b title="{% trans "اجمالي التقييم" %}">
+                                    {{ post|total_rating }}
+                                </b>
+                            </td>
+                            <td class="text-center">
+                                <div class="rate-down">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+                                    <button type="submit" data-postid="{{ post.id }}"
+                                            class="glyphicon glyphicon-chevron-down btn btn-large btn-link"></button>
+                                    <input type="hidden" name="next" value="{{ next }}" class="next-url"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="col-sm-12 col-xs-12 hidden-lg hidden-md">
-                    <div class="rate-up">
-                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
-                        <button type="submit" data-postid="{{ post.id }}" data-toggle="popover"
-                                class="glyphicon glyphicon-chevron-up btn btn-large col-sm-4 col-xs-4 bg-primary"></button>
-                        <input type="hidden" name="next" class="next-url" value="{{ next }}"/>
-                    </div>
-
-
-                    <div data-name="rating" class="text-center text-warning col-sm-4 col-xs-4 bg-success btn">
-                        <b>{{ post.ratings }}</b>
-                    </div>
-                    <div class="rate-down">
-                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
-                        <button type="submit" data-postid="{{ post.id }}"
-                                class="glyphicon glyphicon-chevron-down btn btn-large col-sm-4 col-xs-4 bg-warning"></button>
-                        <input type="hidden" name="next" value="{{ next }}" class="next-url"/>
-
-                    </div>
+                    <table id="tbl-rating" class="table">
+                        <tr>
+                            <td data-name="rating-up" class="text-center bg-success" title="{% trans "تقييم ايجابي" %}">
+                                <b>{{ post.rate_up }}</b>
+                            </td>
+                            
+                            <td class="text-center">{% trans "التقييم" %}</td>
+                                
+                            <td data-name="rating-down" class="text-center bg-danger" title="{% trans "تقييم سلبي" %}">
+                                <b title="{% trans "تقييم سلبي" %}">{{ post.rate_down }}</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">
+                                <div class="rate-up">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+                                    <button type="submit" data-postid="{{ post.id }}" data-toggle="popover"
+                                            class="glyphicon glyphicon-chevron-up btn btn-large btn-link"></button>
+                                    <input type="hidden" name="next" class="next-url" value="{{ next }}"/>
+                                </div>
+                            </td>
+                            <td data-name="total-rating" class="text-center text-primary" title="{% trans "اجمالي التقييم" %}">
+                                <b>
+                                    {{ post|total_rating }}
+                                </b>
+                            </td>
+                            <td class="text-center">
+                                <div class="rate-down">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+                                    <button type="submit" data-postid="{{ post.id }}"
+                                            class="glyphicon glyphicon-chevron-down btn btn-large btn-link"></button>
+                                    <input type="hidden" name="next" value="{{ next }}" class="next-url"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr />
                 </div>
-                <div class="col-lg-11 col-md-11 col-xs-12 col-sm-12" style="margin-top: 15px;">
+                
+                <div class="col-lg-10 col-md-10 col-xs-12 col-sm-12" style="margin-top: 15px;">
                     <p class="post-content">{{ post.content }}</p>
                     {% if user == post.user %}
                         <span class="delete-post">

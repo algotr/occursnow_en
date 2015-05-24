@@ -2,11 +2,23 @@ $(function () {
      $(window).on('load', function () {
         $('p.post-content').linkify();
     });
-
+    
+        
     rate_up();
     rate_down();
     delete_post();
 });
+
+function intial_rating()
+{
+    
+    var rating_up = parseInt($("#tbl-rating").find('td[data-name="rating-up"] b').html()); 
+    var rating_down = parseInt($("#tbl-rating").find('td[data-name="rating-down"] b').html());
+    var total_rating_td = $("#tbl-rating").find('td[data-name="total-rating"] b');
+    
+    var total_rating = rating_up - rating_down;
+    total_rating_td.html(total_rating);
+}
 
 function rate_up() {
     $('.glyphicon-chevron-up').click(function () {   
@@ -22,10 +34,12 @@ function rate_up() {
         var next_url = $(this).parent().find('input[name="next"]').val();
         var csrfmiddlewaretoken = $(this).parent().find('input[name="csrfmiddlewaretoken"]').val();
         var post_id = $(this).attr('data-postid');
-
-        var rating_div = $(this).parent().parent().find('div[data-name="rating"] b');
-        var rating = $(this).parent().parent().find('div[data-name="rating"] b').html();
-
+        
+        var rating_div = $(this).parents("#tbl-rating").find('td[data-name="rating-up"] b');
+        var rating_up = parseInt($(this).parents("#tbl-rating").find('td[data-name="rating-up"] b').html()); 
+        var rating_down = parseInt($(this).parents("#tbl-rating").find('td[data-name="rating-down"] b').html());
+        var total_rating_td = $(this).parents("#tbl-rating").find('td[data-name="total-rating"] b');
+       
         $.ajax({
             "type": "POST",
             "url": "/rate_up/",
@@ -41,9 +55,12 @@ function rate_up() {
         }).success(function (data) {
             rating_div.hide().fadeIn();
             if (data == "success") {
-                rating = parseInt(rating) + 1;
-                rating_div.html(rating);
+                rating_up++;
+                rating_div.html(rating_up);
             }
+            var total_rating = rating_up - rating_down;
+            total_rating_td.hide().fadeIn();
+            total_rating_td.html(total_rating);
         });
     });
 }
@@ -62,9 +79,14 @@ function rate_down() {
         var next_url = $(this).parent().find('input[name="next"]').val();
         var csrfmiddlewaretoken = $(this).parent().find('input[name="csrfmiddlewaretoken"]').val();
         var post_id = $(this).attr('data-postid');
-        var rating_div = $(this).parent().parent().find('div[data-name="rating"] b');
-        var rating = $(this).parent().parent().find('div[data-name="rating"] b').html();
-
+        
+        var rating_div = $(this).parents("#tbl-rating").find('td[data-name="rating-down"] b');
+        var rating_up = parseInt($(this).parents("#tbl-rating").find('td[data-name="rating-up"] b').html()); 
+        var rating_down = parseInt($(this).parents("#tbl-rating").find('td[data-name="rating-down"] b').html());
+        var total_rating_td = $(this).parents("#tbl-rating").find('td[data-name="total-rating"] b');
+        
+        
+        
         $.ajax({
             "type": "POST",
             "url": "/rate_down/",
@@ -80,10 +102,13 @@ function rate_down() {
         }).success(function (data) {
             rating_div.hide().fadeIn();
             if (data == "success") {
-                rating = parseInt(rating) - 1;
-                rating_div.html(rating);
+                rating_down++;
+                rating_div.html(rating_down);
             }
-
+             
+             var total_rating = rating_up - rating_down;
+             total_rating_td.hide().fadeIn();
+             total_rating_td.html(total_rating);
         });
     });
 }
