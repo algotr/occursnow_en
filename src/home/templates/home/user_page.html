@@ -6,17 +6,12 @@
     {% include "includes/user_menu.html" %}
 
 		<div class="col-lg-9 col-md-9 col-sm-8">
-            <div class="profile-content">
-            {% if user.username == req_user.username %}
-                <div class="panel panel-primary">
-                    <div class="panel-body">
-                        {% include 'includes/form_post.html' %}
-                    </div>
-                </div>
-                {% endif %}
-
-            {% include "includes/posts.html" %}
+            <div class="profile-content" style="min-height: 248px !important">
+                some statatics
             </div>
 		</div>
-    </div>
+</div>
+<div class="row profile">
+    {% include "includes/posts.html" %}
+</div>
 {% endblock %}

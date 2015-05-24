@@ -1,0 +1,20 @@
+/src/home/
+    models.py
+    views.py
+
+/src/home/templates/home/
+    user_page.html
+    
+/src/home/templatetags/
+    rating.py
+
+/src/templates/includes/
+    posts.html
+    
+/src/static/js/
+    scripts.js
+    styles.css
+    
+/src/templates/includes/
+    user_menu.html
+

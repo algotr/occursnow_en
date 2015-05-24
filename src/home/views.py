@@ -150,7 +150,10 @@ def user_page(request, username, form=None):
     next_url = reverse('user_page', args=(req_user.username,))
     context = {'req_user': req_user, 'posts': posts, 'title': _(' صفحة المستخدم ' + req_user.username),
                'post_form': form, 'next': next_url}
-    return render(request, 'home/user_page.html', context)
+    if request.user.username == req_user.username:
+        return render(request, 'home/profile.html', context)
+    else:
+        return render(request, 'home/user_page.html', context)
 
 
 @login_required()
