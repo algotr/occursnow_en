@@ -4,12 +4,15 @@
 
 /src/home/templates/home/
     user_page.html
+    profile.html
+    user_list.html
     
 /src/home/templatetags/
     rating.py
 
 /src/templates/includes/
     posts.html
+    follow.html
     
 /src/static/js/
     scripts.js
@@ -18,3 +21,5 @@
 /src/templates/includes/
     user_menu.html
 
+/src/accounts/templates/accounts/
+    profile.html

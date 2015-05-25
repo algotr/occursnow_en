@@ -16,13 +16,15 @@
             <img src="{{ u.userprofile.gravatar_url }}" alt="" class="img-circle img-responsive">
         </div>
         <div class="col-md-8 col-sm-10 col-xs-12">
+            <p class="page-header">
            <a href="{% url 'user_page' u.username %}">{{ u.get_full_name }}</a>
+            </p>
            <p>
-                <small>{% trans "عدد المتابعين" %}: </small>
+                <i class="glyphicon glyphicon-heart">&nbsp;</i><small>{% trans "عدد المتابعين" %}: </small>
                 <small class="text-success">{{ u.userprofile.followed_by.all.count }}</small>
             </p>
             <p>
-                <small>{% trans "عدد الاخبار" %}: </small>
+                <i class="glyphicon glyphicon-list-alt">&nbsp;</i><small>{% trans "عدد الاخبار" %}: </small>
                 <small class="text-success">{{ u.post_set.all.count }}</small>
             </p>
         </div>
