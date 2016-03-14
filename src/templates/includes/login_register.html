@@ -7,7 +7,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{% trans "تسجيل الدخول" %}</h4>
+                <h4 class="modal-title">{% trans "Login" %}</h4>
             </div>
             <form class="form-signin" action="{% url 'accounts:login' %}" method="post">
                 {% csrf_token %}
@@ -23,8 +23,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">{% trans "تسجيل الدخول" %}</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "الغاء اﻻمر" %}</button>
+                    <button class="btn btn-primary" type="submit">{% trans "Login" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
                     <input type="hidden" name="next" value="{{ next }}"/>
                 </div>
             </form>
@@ -41,7 +41,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{% trans "تسجيل حساب جديد" %}</h4>
+                <h4 class="modal-title">{% trans "Register new account" %}</h4>
             </div>
             <form class="form-signin" action="{% url 'accounts:register' %}" method="post">
                 {% csrf_token %}
@@ -66,8 +66,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">{% trans "تسجيل" %}</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "الغاء اﻻمر" %}</button>
+                    <button class="btn btn-primary" type="submit">{% trans "Register" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
                 </div>
             </form>
         </div>

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.core.cache import cache
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
@@ -8,17 +9,17 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from home.forms import PostForm
 from .models import Post
-from utils import constants
+from utils import constants, functions
 
 
 def index(request, form=None):
+
     if request.user.is_authenticated():
         post_form = form or PostForm()
         user = request.user
-        posts_self = Post.objects.select_related().filter(user=user)
-        posts_buddies = Post.objects.select_related().filter(user__userprofile__in=user.userprofile.follows.all)
 
-        posts_list = posts_self | posts_buddies
+        posts_list = functions.get_user_posts(user) | functions.get_posts_buddies(user)
+
         paginator = Paginator(posts_list, constants.PER_PAGE)
         page = request.GET.get('page')
 
@@ -33,7 +34,7 @@ def index(request, form=None):
 
         return render(request, 'home/index.html', context)
     else:
-        posts_list = Post.objects.prefetch_related().all()
+        posts_list = functions.get_public_posts()
         paginator = Paginator(posts_list, constants.PER_PAGE)
         page = request.GET.get('page')
         try:
@@ -48,9 +49,13 @@ def index(request, form=None):
 
 @login_required()
 def public_posts(request, form=None):
+
     post_form = form or PostForm()
-    posts_list = Post.objects.select_related().all()
+
     user = request.user
+
+    posts_list = functions.get_public_posts()
+
     paginator = Paginator(posts_list, constants.PER_PAGE)
     page = request.GET.get('page')
 
@@ -61,7 +66,7 @@ def public_posts(request, form=None):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
 
-    context = {'title': _('الصفحة العامة'), 'post_form': post_form, 'user': user, 'posts': posts, 'next': '/public/'}
+    context = {'title': _('Public'), 'post_form': post_form, 'user': user, 'posts': posts, 'next': '/public/'}
 
     return render(request, 'home/index.html', context)
 
@@ -113,12 +118,17 @@ def del_post(request):
 
 @login_required()
 def users_list(request):
+
     current_user = request.user
-    authors_list = User.objects.exclude(userprofile__in=current_user.userprofile.follows.all()) \
-        .exclude(username=current_user.username).order_by('username')
+    page = request.GET.get('page')
+
+    follows = functions.get_follows(current_user)
+    authors_list = functions.authors_for(current_user)
+    authors_list = authors_list.exclude(userprofile__in=follows)
+    admin_user = User.objects.get(username='admin')
+    authors_list = authors_list.exclude(userprofile__in=[admin_user])
 
     paginator = Paginator(authors_list, constants.PER_PAGE)
-    page = request.GET.get('page')
 
     try:
         users = paginator.page(page)
@@ -127,15 +137,17 @@ def users_list(request):
     except EmptyPage:
         users = paginator.page(paginator.num_pages)
     next_url = reverse('user_list')
-    context = {'users': users, 'next': next_url, 'title': _('صفحة الكتاب')}
+    context = {'users': users, 'next': next_url, 'title': _('Users')}
     return render(request, 'home/users_list.html', context)
 
 
 @login_required()
 def user_page(request, username, form=None):
+
     form = form or PostForm()
     req_user = get_object_or_404(User, username=username)
-    posts_list = Post.objects.select_related().filter(user=req_user)
+
+    posts_list = functions.get_user_posts(req_user)
 
     paginator = Paginator(posts_list, constants.PER_PAGE)
     page = request.GET.get('page')
@@ -148,7 +160,7 @@ def user_page(request, username, form=None):
         posts = paginator.page(paginator.num_pages)
 
     next_url = reverse('user_page', args=(req_user.username,))
-    context = {'req_user': req_user, 'posts': posts, 'title': _(' صفحة المستخدم ' + req_user.username),
+    context = {'req_user': req_user, 'posts': posts, 'title': _('User page: ' + req_user.username),
                'post_form': form, 'next': next_url}
     if request.user.username == req_user.username:
         return render(request, 'home/profile.html', context)
@@ -158,9 +170,12 @@ def user_page(request, username, form=None):
 
 @login_required()
 def follows_list(request):
+
     user = request.user
     req_user = user
-    followings_list = user.userprofile.follows.select_related().all()
+
+    followings_list = functions.get_follows(user)
+
     paginator = Paginator(followings_list, constants.PER_PAGE)
     page = request.GET.get('page')
 
@@ -171,15 +186,16 @@ def follows_list(request):
     except EmptyPage:
         follows = paginator.page(paginator.num_pages)
     next_url = reverse('followings')
-    context = {'user_profiles': follows, 'title': _('اصدقاء'), 'user': user, 'req_user': req_user, 'next': next_url}
+    context = {'user_profiles': follows, 'title': _('Followings'), 'user': user, 'req_user': req_user, 'next': next_url}
     return render(request, 'home/follows_list.html', context)
 
 
 @login_required()
 def followed_by_list(request):
+
     user = request.user
     req_user = user
-    followers_list = user.userprofile.followed_by.select_related().all()
+    followers_list = functions.get_followed(user)
     paginator = Paginator(followers_list, constants.PER_PAGE)
     page = request.GET.get('page')
 
@@ -190,15 +206,16 @@ def followed_by_list(request):
     except EmptyPage:
         followed_by = paginator.page(paginator.num_pages)
     next_url = reverse('followers')
-    context = {'user_profiles': followed_by, 'title': _('متابعين'), 'user': user, 'req_user': req_user,
+    context = {'user_profiles': followed_by, 'title': _('Followers'), 'user': user, 'req_user': req_user,
                'next': next_url}
     return render(request, 'home/followed_by_list.html', context)
 
 
 def tag_page(request, tag_name):
+
     form = PostForm()
-    posts_list = Post.objects.select_related().filter(tags__name__in=[tag_name])
-    title = _('القسم') + ": " + tag_name
+    posts_list = functions.get_posts_by_tag(tag_name)
+    title = _('Tag') + ": " + tag_name
 
     paginator = Paginator(posts_list, constants.PER_PAGE)
     page = request.GET.get('page')
@@ -217,7 +234,11 @@ def tag_page(request, tag_name):
 @login_required()
 def follow(request, username):
     user = request.user
-    follow_user = User.objects.get(username=username)
+    follow_user = cache.get(username)
+    if not follow_user:
+        follow_user = User.objects.get(username=username)
+        cache.set(username, follow_user, constants.CACHE_DURATION)
+
     user.userprofile.follows.add(follow_user.userprofile)
     next_url = request.POST.get('next', 'home:index')
     return redirect(next_url)
@@ -226,7 +247,11 @@ def follow(request, username):
 @login_required()
 def unfollow(request, username):
     user = request.user
-    unfollow_user = User.objects.get(username=username)
+    unfollow_user = cache.get(username)
+    if not unfollow_user:
+        unfollow_user = User.objects.get(username=username)
+        cache.set(username, unfollow_user, constants.CACHE_DURATION)
+
     user.userprofile.follows.remove(unfollow_user)
     next_url = request.POST.get('next', 'home:index')
     return redirect(next_url)
@@ -236,7 +261,12 @@ def unfollow(request, username):
 def rate_up(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
-        post = get_object_or_404(Post, pk=post_id)
+
+        post = cache.get('post_'+post_id)
+        if not post:
+            post = get_object_or_404(Post, pk=post_id)
+            cache.set('post_'+post_id, post, constants.CACHE_DURATION)
+
         success = "false"
 
         if request.user not in post.rated_by.all():
@@ -260,7 +290,12 @@ def rate_up(request):
 def rate_down(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
-        post = get_object_or_404(Post, pk=post_id)
+
+        post = cache.get('post_'+post_id)
+        if not post:
+            post = get_object_or_404(Post, pk=post_id)
+            cache.set('post_'+post_id, post, constants.CACHE_DURATION)
+
         success = "false"
 
         if request.user not in post.rated_by.all():
@@ -279,3 +314,4 @@ def rate_down(request):
                 return redirect('home:index')
 
     return redirect('home:index')
+

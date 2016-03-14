@@ -7,25 +7,25 @@
 					<li class="active">
 						<a href="{% url 'user_page' user.username %}">
 						<i class="glyphicon glyphicon-home"></i>
-						{% trans "الرئيسية" %}
+						{% trans "Home" %}
 						</a>
 					</li>
 					<li>
 						<a href="{% url 'accounts:profile' %}">
 						<i class="glyphicon glyphicon-user"></i>
-						{% trans "اعدادات الحساب" %}
+						{% trans "Settings" %}
 	                    </a>
 					</li>
 					<li>
 						<a href="{% url 'followers' %}">
 						<i class="glyphicon glyphicon-ok"></i>
-						{% trans "المتابعين" %}
+						{% trans "Followers" %}
 	                    </a>
 					</li>
 					<li>
 						<a href="{% url 'followings' %}">
 						<i class="glyphicon glyphicon-user"></i>
-						{% trans "الأصدقاء" %}
+						{% trans "Followings" %}
 	                    </a>
 					</li>
 				</ul>
@@ -44,11 +44,11 @@
 				<!-- SIDEBAR BUTTONS -->{% if user.id != req_user.id %}
 				<div class="profile-userbuttons">{% if req_user.userprofile in user.userprofile.follows.all %}
 					<form action="{% url 'unfollow' req_user.username %}" method="post">{% csrf_token %}
-						<button type="submit" class="btn btn-danger btn-sm">{% trans "الغاء المتابعة" %}</button>
+						<button type="submit" class="btn btn-danger btn-sm">{% trans "Unfollow" %}</button>
 						<input type="hidden" value="{{ next }}" name="next" />
 					</form>{% else %}
 					<form action="{% url 'follow' req_user.username %}" method="post">{% csrf_token %}
-						<button type="submit" class="btn btn-success btn-sm">{% trans "متابعة" %}</button>
+						<button type="submit" class="btn btn-success btn-sm">{% trans "Follow" %}</button>
 						<input type="hidden" value="{{ next }}" name="next" />
 					</form>{% endif %}</div>{% endif %}
 			</div><!-- /col-lg-3 -->

@@ -15,11 +15,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserProfile',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('follows', models.ManyToManyField(to='accounts.UserProfile', related_name='followed_by')),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('follows', models.ManyToManyField(to='accounts.UserProfile', blank=True, related_name='followed_by')),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
             options={
+                'db_table': 'user_profile',
             },
             bases=(models.Model,),
         ),

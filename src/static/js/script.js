@@ -121,7 +121,7 @@ function delete_post( ) {
         var csrfmiddlewaretoken = $(this).parent().find('input[name="csrfmiddlewaretoken"]').val();
         var post_id = $(this).attr('data-postid');
 
-        if (confirm("هل انت متأكد من حذف الخبر؟")) {
+        if (confirm("You can't redo deleting this content! Confirm delete?")) {
             $.ajax({
                 type: "POST",
                 url: "/home/delete_post/",

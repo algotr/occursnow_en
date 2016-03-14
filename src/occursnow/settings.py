@@ -70,12 +70,19 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache'),
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'ar-ye'
+LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Aden'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -108,4 +115,15 @@ HAYSTACK_CONNECTIONS = {
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
-SITE_ID  = 1
+SITE_ID = 1
+
+from django.utils.translation import ugettext_lazy as _
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+LANGUAGES = (
+    ('en-US', _('English')),
+    ('ar-YE', _('العربية')),
+)
+

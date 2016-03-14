@@ -7,7 +7,7 @@
         <div class="col-lg-9 col-md-9 col-sm-8">
             <div class="profile-content">
                 <div class="panel panel-primary">
-                    <div class="panel-heading">{% trans 'اعدادات الحساب' %} ({{ user.username }})</div>
+                    <div class="panel-heading">{% trans 'Settings' %} ({{ user.username }})</div>
                     <div class="panel-body">
                         <form action="{% url "accounts:profile" %}" method="post">{% csrf_token %}
                             <div class="form-group">
@@ -70,7 +70,7 @@
                                     </ul>
                                 {% endif %}
                             </div>
-                            <button class="btn btn-primary" type="submit">{% trans "حفظ" %}</button>
+                            <button class="btn btn-primary" type="submit">{% trans "Save" %}</button>
                         </form>
                     </div>
                 </div>

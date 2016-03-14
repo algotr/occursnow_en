@@ -6,12 +6,12 @@ from .models import Post
 
 class PostForm(forms.ModelForm):
     content = forms.CharField(required=True, widget=forms.Textarea(
-        attrs={'class': 'form-control', 'placeholder': _('تفاصيل الخبر لا يزيد عن 300 حرف'),
+        attrs={'class': 'form-control', 'placeholder': _('News content must be less than 300 characters'),
                'cols': '60', 'rows': '3', 'required': 'required', 'maxlength':'300',
-               'title': _('يجب كتابة تفاصيل الخبر')}))
-    tags = forms.CharField(required=True, label=_('الأقسام (Tags)'), widget=forms.TextInput(
-        attrs={'class': 'form-control col-sm-7', 'placeholder': _('افصل بين الاقسام بفاصلة'),
-               'required': 'required', 'title': _('يجب كتابة التصنيف')}))
+               'title': _('News content is required')}))
+    tags = forms.CharField(required=True, label=_('Tags'), widget=forms.TextInput(
+        attrs={'class': 'form-control col-sm-7', 'placeholder': _('Separate tags with comma'),
+               'required': 'required', 'title': _('Tags are required')}))
 
     class Meta:
         model = Post

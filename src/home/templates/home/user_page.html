@@ -8,25 +8,25 @@
 
 		<div class="col-lg-9 col-md-9 col-sm-8">
             <div class="profile-content" style="min-height: 150px !important">
-                <div class="col-lg-5">
-                    <h4 class="page-header">
-                        <i class="glyphicon glyphicon-list-alt">&nbsp;</i>{% trans "عدد اﻻخبار" %} ({{ req_user.post_set.count }}) {% trans "خبر" %}
-                    </h4>
+                <div class="col-lg-5 page-header">
+                    <h5>
+                        <i class="glyphicon glyphicon-list-alt">&nbsp;</i>{% trans "News" %} ({{ req_user.post_set.count }})
+                    </h5>
                 </div>
-                <div class="col-lg-5 col-lg-offset-1">
-                    <h4 class="page-header">
-                        <i class="glyphicon glyphicon-user">&nbsp;</i>{% trans "اخر تسجيل دخول منذ" %} ({{ req_user.last_login|timesince }})
-                    </h4>
+                <div class="col-lg-5 col-lg-offset-1 page-header">
+                    <h5>
+                        <i class="glyphicon glyphicon-user">&nbsp;</i>{% trans "Last login" %} ({{ req_user.last_login|timesince }})
+                    </h5>
                 </div>
-                <div class="col-lg-5">
-                    <h4 class="page-header">
-                        <i class="glyphicon glyphicon-heart">&nbsp;</i>{% trans "عدد المتابعين" %} ({{ req_user.userprofile.followed_by.count }}) {% trans "متابع" %}
-                    </h4>
+                <div class="col-lg-5 page-header">
+                    <h5>
+                        <i class="glyphicon glyphicon-heart">&nbsp;</i>{% trans "Followers" %} ({{ req_user.userprofile.followed_by.count }})
+                    </h5>
                 </div>
-                <div class="col-lg-5 col-lg-offset-1">
-                    <h4 class="page-header">
-                        <i class="glyphicon glyphicon-heart">&nbsp;</i>{% trans "اﻻصدقاء" %} ({{ req_user.userprofile.follows.count }})
-                    </h4>
+                <div class="col-lg-5 col-lg-offset-1 page-header">
+                    <h5>
+                        <i class="glyphicon glyphicon-heart">&nbsp;</i>{% trans "Followings" %} ({{ req_user.userprofile.follows.count }})
+                    </h5>
                 </div>
             </div>
 		</div>

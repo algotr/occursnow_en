@@ -5,50 +5,50 @@ from django.contrib.auth.models import User
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(label=_('اسم المستخدم'),
+    username = forms.CharField(label=_('Username'),
                                widget=forms.TextInput(attrs={'class': 'form-control',
-                                                             'placeholder': 'اسم المستخدم',
+                                                             'placeholder': _('Username'),
                                                              'required': 'required',
-                                                             'title': _('يجب كتابة اسم المستخدم')}))
-    password = forms.CharField(label='كلمة المرور',
+                                                             'title': _('Username is required')}))
+    password = forms.CharField(label=_('Password'),
                                widget=forms.PasswordInput(attrs={'class': 'form-control',
-                                                                 'placeholder': _('كلمة المرور'),
+                                                                 'placeholder': _('Password'),
                                                                  'required': 'required',
-                                                                 'title': _('يجب كتابة كلمة المرور')}))
+                                                                 'title': _('is required Password')}))
 
 
 class RegisterForm(UserCreationForm):
-    username = forms.CharField(label=_('اسم المستخدم'),
+    username = forms.CharField(label=_('Username'),
                                widget=forms.TextInput(attrs={'class': 'form-control',
-                                                             'placeholder': 'أسم المستخدم',
+                                                             'placeholder': _('Username'),
                                                              'required': 'required',
-                                                             'title': _('يجب كتابة اسم المستخدم')}))
-    password1 = forms.CharField(label='كلمة المرور',
+                                                             'title': _('Username is required')}))
+    password1 = forms.CharField(label=_('Password'),
                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
-                                                                  'placeholder': _('كلمة المرور'),
+                                                                  'placeholder': _('Password'),
                                                                   'required': 'required',
-                                                                  'title': _('يجب كتابة كلمة المرور')}))
-    password2 = forms.CharField(label='تأكيد كلمة المرور',
+                                                                  'title': _('Password is required')}))
+    password2 = forms.CharField(label=_('Confirm Password'),
                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
-                                                                  'placeholder': _('تأكيد كلمة المرور'),
+                                                                  'placeholder': _('Confirm Password'),
                                                                   'required': 'required',
-                                                                  'title': _('يجب تأكيد كلمة المرور')}))
-    email = forms.CharField(label=_('البريد الالكتروني'),
+                                                                  'title': _('You mush confirm password')}))
+    email = forms.CharField(label=_('Email'),
                             widget=forms.EmailInput(attrs={'class': 'form-control',
-                                                           'placeholder': _('البريد الالكتروني'),
+                                                           'placeholder': _('Email'),
                                                            'required': 'required',
-                                                           'title': _('يجب كتابة البريد الالكتروني')
+                                                           'title': _('Email is required')
                                                            }))
-    first_name = forms.CharField(label=_('الأسم الاول'),
+    first_name = forms.CharField(label=_('Firstname'),
                                  widget=forms.TextInput(attrs={'class': 'form-control',
-                                                               'placeholder': _('الأسم الاول'),
+                                                               'placeholder': _('Firstname'),
                                                                'required': 'required',
-                                                               'title': _('يجب كتابة الأسم الاول')}))
-    last_name = forms.CharField(label=_('أسم العائلة'),
+                                                               'title': _('Firstname is required')}))
+    last_name = forms.CharField(label=_('Family Name'),
                                 widget=forms.TextInput(attrs={'class': 'form-control',
-                                                              'placeholder': _('أسم العائلة'),
+                                                              'placeholder': _('Family Name'),
                                                               'required': 'required',
-                                                              'title': _('يجب كتابة أسم العائلة')}))
+                                                              'title': _('Family Name is required')}))
 
     class Meta:
         model = User
@@ -66,38 +66,38 @@ class RegisterForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(label=_('الأسم الاول'),
+    first_name = forms.CharField(label=_('Firstname'),
                                  widget=forms.TextInput(attrs={'class': 'form-control',
-                                                               'placeholder': _('الأسم الاول'),
+                                                               'placeholder': _('Firstname'),
                                                                'required': 'required',
-                                                               'title': _('يجب كتابة الأسم الاول')}))
-    last_name = forms.CharField(label=_('أسم العائلة'),
+                                                               'title': _('Firstname is required')}))
+    last_name = forms.CharField(label=_('Family Name'),
                                 widget=forms.TextInput(attrs={'class': 'form-control',
-                                                              'placeholder': _('أسم العائلة'),
+                                                              'placeholder': _('Family Name'),
                                                               'required': 'required',
-                                                              'title': _('يجب كتابة أسم العائلة')}))
-    email = forms.CharField(label=_('البريد الالكتروني'),
+                                                              'title': _('Family Name is required')}))
+    email = forms.CharField(label=_('Email'),
                             widget=forms.EmailInput(attrs={'class': 'form-control',
-                                                           'placeholder': _('البريد الالكتروني'),
+                                                           'placeholder': _('Email'),
                                                            'required': 'required',
-                                                           'title': _('يجب كتابة البريد الالكتروني')
+                                                           'title': _('Email is required')
                                                            }))
-    password1 = forms.CharField(label='كلمة المرور',
+    password1 = forms.CharField(label=_('Password'),
                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
-                                                                  'placeholder': _('كلمة المرور'),
-                                                                  'title': _('يجب كتابة كلمة المرور')}),
+                                                                  'placeholder': _('Password'),
+                                                                  'title': _('Password is required')}),
                                 required=False)
-    password2 = forms.CharField(label='تأكيد كلمة المرور',
+    password2 = forms.CharField(label=_('Confirm Password'),
                                 widget=forms.PasswordInput(attrs={'class': 'form-control',
-                                                                  'placeholder': _('تأكيد كلمة المرور'),
-                                                                  'title': _('يجب تأكيد كلمة المرور')}),
+                                                                  'placeholder': _('Confirm Password'),
+                                                                  'title': _('You have to confirm password')}),
                                 required=False)
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError(_('كلمة المرور غير متطابقة'))
+            raise forms.ValidationError(_('Password not match!'))
         return password2
 
     class Meta:

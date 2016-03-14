@@ -1,8 +1,8 @@
 /* css of font here */
 
-@import url(http://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css);
+/* @import url(http://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css); */
 
-
+/*
 @font-face {
 	font-family: 'Conv_GE SS Two Light';
 	src: url('../fonts/GE SS Two Light.eot');
@@ -14,7 +14,7 @@
 @font-face {
   font-family: 'GE SS Two Light';
   src: url('http://www.fontsaddict.com/fontface/ge-ss-two-light.otf');
-}
+}*/
 
 
 html {
@@ -23,7 +23,8 @@ html {
 }
 
 body{
-    font-family: 'Droid Arabic Naskh', 'Conv_GE SS Two Light';
+/*    font-family: 'Droid Arabic Naskh', 'Conv_GE SS Two Light';*/
+    
     background-color: darkgrey;
     margin-bottom: 60px;
     padding-top: 20px;
@@ -38,7 +39,7 @@ body{
 }
 
 .profile {
-  margin: 20px 0;
+  margin: 0;
 }
 
 /* Profile sidebar */
@@ -174,3 +175,5 @@ body > .container {
 code {
   font-size: 80%;
 }
+
+.margin-top-5 {margin-top: 5px;}

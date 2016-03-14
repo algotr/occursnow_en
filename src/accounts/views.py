@@ -8,10 +8,11 @@ from .forms import LoginForm, RegisterForm, ProfileForm
 
 
 def login(request):
+
     if request.user.is_authenticated():
         return redirect('home')
 
-    context = {'title': 'تسجيل الدخول'}
+    context = {'title': _('تسجيل الدخول')}
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -49,6 +50,7 @@ def logout(request):
 
 
 def register(request):
+
     if request.user.is_authenticated():
         return redirect('home')
 

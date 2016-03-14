@@ -20,7 +20,7 @@
                         <form action="{% url "accounts:login" %}" method="post">
                             {% csrf_token %}
                             {{ form.as_p }}
-                            <input type="submit" class="btn btn-primary" value="{% trans "تسجيل الدخول" %}"/>
+                            <input type="submit" class="btn btn-primary" value="{% trans "Login" %}"/>
                             <input type="hidden" name="next" value="{{ next }}"/>
                         </form>
                     </div>

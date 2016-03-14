@@ -4,52 +4,38 @@
 {% block content %}
     {% if query %}
         <div class="panel panel-default">
-            <div class="panel-heading"><h3>{% trans "نتائج البحث عن: " %} {{ query }}</h3></div>
+            <div class="panel-heading"><h3>{% trans "Search Results: " %} {{ query }}</h3></div>
         </div>
         {% for result in page.object_list %}
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="col-lg-1 col-md-1 hidden-sm hidden-xs">
-                        <div class="post-vote text-center">
-                            <a href="#" class="glyphicon glyphicon-chevron-up btn btn-large"></a>
-
-                            <div class="text-center text-warning"><b>{{ result.object.ratings.rating }}</b></div>
-                            <a href="#" class="glyphicon glyphicon-chevron-down btn btn-large"></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xs-12 hidden-lg hidden-md">
-                        <a href="#"
-                           class="glyphicon glyphicon-chevron-up btn btn-large col-sm-4 col-xs-4 bg-primary"></a>
-
-                        <div class="text-center text-warning col-sm-4 col-xs-4 bg-success btn"><b>{{ result.object.ratings.rating }}</b>
-                        </div>
-                        <a href="#"
-                           class="glyphicon glyphicon-chevron-down btn btn-large col-sm-4 col-xs-4 bg-warning"></a>
-                    </div>
+                    
                     <div class="col-lg-11 col-md-11 col-xs-12 col-sm-12" style="margin-top: 15px;">
-                        {{ result.object.content }}
-                        {% if user == result.object.user %}
-                            <form action="{% url "home:delete_post" result.object.id %}" method="post"
-                                  class="form-inline pull-left">{% csrf_token %}
-                                <button type="submit" class="btn-link"
-                                        onclick="return confirm('{% trans "هل انت متأكد من حذف الخبر؟" %}')">
-                                    <i class="glyphicon glyphicon-remove-circle text-danger"></i>
-                                </button>
-                                <input type="hidden" value="{{ next }}" name="next"/>
-                            </form>
+                        <p class="post-content">
+						{{ result.object.content }}
+						</p>
+                        {% if user == result.object.user %}                            
+                        <span class="delete-post">
+                            <a href="javascript:void(0);" class="pull-left"
+                               data-postid="{{ result.object.id }}">
+                                <i class="glyphicon glyphicon-remove-circle text-danger"></i>
+                            </a>
+                            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+                            <input type="hidden" name="next" value="{{ next }}" class="next-url"/>
+                        </span>
                         {% endif %}
 
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <small> الكاتب: <a href="{% url 'user_page' result.object.user.username %}">{{ result.object.user.get_full_name }}</a>
+                    <small> Author: <a href="{% url 'user_page' result.object.user.username %}">{{ result.object.user.get_full_name }}</a>
                     </small>
                     &nbsp; | &nbsp;
                     <small><span
-                            class="glyphicon glyphicon-time">&nbsp;</span>{% trans "قبل حوالي" %}: {{ result.object.created_at|timesince }}
+                            class="glyphicon glyphicon-time">&nbsp;</span>{% trans "ago" %}: {{ result.object.created_at|timesince }}
                     </small>
                     &nbsp; | &nbsp;
-                    <small><span class="glyphicon glyphicon-list">&nbsp;</span>{% trans "الأقسام" %}:&nbsp;
+                    <small><span class="glyphicon glyphicon-list">&nbsp;</span>{% trans "Tags" %}:&nbsp;
                         {% for tag in result.object.tags.all %}
                             <a href="{% url 'home:tag_page' tag %}">{{ tag }}</a>{% if not forloop.last %},{% endif %}
                         {% endfor %}
@@ -58,7 +44,7 @@
                 </div>
             </div><!-- end .panel -->
         {% empty %}
-            <p>{% trans "لا توجد نتائج للبحث" %}</p>
+            <p>{% trans "Sorry couldn't find what you looking for. Please try again!" %}</p>
         {% endfor %}
 
         {% if page.has_previous or page.has_next %}
@@ -68,14 +54,14 @@
                         <li class="next">
                             {% if page.has_previous %}
                                 <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo;
-                                {% trans "الاقدم" %}
+                                {% trans "Previous" %}
                             {% if page.has_previous %}</a>{% endif %}
                         </li>
                     {% endif %}
                     {% if page.has_previous %}
                         <li class="previous">
                         {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}
-                {% trans "الاحدث" %} &raquo;{% if page.has_next %}</a>{% endif %}
+                {% trans "Next" %} &raquo;{% if page.has_next %}</a>{% endif %}
                         </li>
                     {% endif %}
 
